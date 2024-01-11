@@ -125,7 +125,7 @@ function Dashboard() {
       } else {
         try {
           // Send API POST request to check session
-          const response = await fetch('http://localhost:3000/getStationData/' + stationName, {
+          const response = await fetch('http://94.176.237.198/api/getStationData/' + stationName, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -53,7 +53,7 @@ function SignIn() {
   const handleSignIn = async () => {
     try {
       // Fetch data from your API endpoint
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://94.176.237.198/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
