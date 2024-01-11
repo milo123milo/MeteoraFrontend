@@ -5,7 +5,7 @@
 	"author": "Creative Tim",
 	"license": "See license in https://www.creative-tim.com/license",
 	"description": "Material UI version of Vision UI Dashboard by Creative Tim",
-	"homepage": "https://demos.creative-tim.com/vision-ui-dashboard-react/#/dashboard",
+	"homepage": "https://demos.creative-tim.com/#/dashboard",
 	"bugs": {
 		"url": "https://github.com/creativetimofficial/vision-ui-dashboard-react/issues"
 	},
@@ -41,6 +41,7 @@
 		"react-icons": "^4.3.1",
 		"react-router-dom": "5.2.0",
 		"react-scripts": "4.0.3",
+		"serve": "^14.2.1",
 		"stylis": "4.0.10",
 		"stylis-plugin-rtl": "2.1.0",
 		"uuid": "8.3.2",
