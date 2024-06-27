@@ -96,9 +96,8 @@ const routes = [
     noCollapse: true,
   },
   {
-    type: "collapse",
-    name: "Report",
-    key: "tables",
+    
+    
     route: "/tables",
     icon: <IoStatsChart size="15px" color="inherit" />,
     component: Tables,

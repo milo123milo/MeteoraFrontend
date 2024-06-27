@@ -1,0 +1,13 @@
+.Select-root {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+  
+  .Select-select {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    color: white !important;
+    font-weight: bold !important;
+  }

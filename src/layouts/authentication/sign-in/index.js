@@ -53,7 +53,7 @@ function SignIn() {
   const handleSignIn = async () => {
     try {
       // Fetch data from your API endpoint
-      const response = await fetch("http://94.176.237.198/api/login", {
+      const response = await fetch("https://meteorastation.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ function SignIn() {
         const sessionID = data.sessionID; // Adjust this based on your API response structure
 
         // Store the sessionID locally (e.g., in localStorage)
-        document.cookie = `sessionID=${sessionID}; secure; max-age=3600; path=/;`;
+        document.cookie = `sessionID=${sessionID}; max-age=3600; path=/;`;
 
         // Optionally, you can redirect the user to another page
         history.push("/dashboard/Station1");

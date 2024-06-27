@@ -32,6 +32,7 @@ import VuiTypography from "components/VuiTypography";
 function DefaultNavbarLink({ icon, name, route }) {
   return (
     <>
+      <div>MILOO</div>
       <VuiBox
         component={Link}
         to={route}

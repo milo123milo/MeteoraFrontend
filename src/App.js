@@ -108,7 +108,7 @@ export default function App() {
       } else {
         try {
           // Send API POST request to check session
-          const response = await fetch('http://94.176.237.198/api/check-session', {
+          const response = await fetch('https://meteorastation.com/api/check-session', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

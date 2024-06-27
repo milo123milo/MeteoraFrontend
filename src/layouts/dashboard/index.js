@@ -19,10 +19,13 @@
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
-import { Card, LinearProgress, Stack } from "@mui/material";
+import { Select, MenuItem, Card, LinearProgress, Stack } from "@mui/material";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
+import VuiButton from "components/VuiButton";
 import VuiTypography from "components/VuiTypography";
 import VuiProgress from "components/VuiProgress";
 
@@ -88,7 +91,113 @@ function Dashboard() {
   const [otherParamsAvg, setOtherParamsAvg] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingLine, setIsLoadingLine] = useState(true);
 
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, "+")
+      .replace(/_/g, "/");
+  
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+  
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+  function handleAlertOn() {
+    console.log("Confirm Notifications Activation?")
+    const publicVapidKey =
+      "BAABol4lIL0tpSskELBxy8pFcHw-uNFXoD4WfTlwvPuv4Od-FIoKQUl2kDnESPH4flCcGUfCIzZVmNvadOfMNJE";
+      /*if ("serviceWorker" in navigator) {
+        send().catch(err => console.error(err));
+      }*/
+      async function send() {
+        alert("Confirm Notifications Activation?")
+        // Register Service Worker
+        console.log("Registering service worker...");
+        const register = await navigator.serviceWorker.register("/worker.js", {
+          scope: "/"
+        });
+        console.log("Service Worker Registered...");
+      
+        // Check for existing subscription
+        const existingSubscription = await register.pushManager.getSubscription();
+      
+        if (existingSubscription) {
+          // Unsubscribe from the existing subscription
+          console.log("Unsubscribing from existing subscription...");
+          await existingSubscription.unsubscribe();
+          console.log("Existing subscription unsubscribed...");
+        }
+      
+        // Register Push with new applicationServerKey
+        console.log("Registering Push...");
+        const subscription = await register.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+        });
+        console.log("Push Registered...");
+      
+        // Send Push Notification
+        console.log("Sending Push...");
+        await fetch("https://meteorastation.com/api/subscribe", {
+          method: "POST",
+          body: JSON.stringify(subscription),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        console.log("Push Sent...");
+      }
+  
+    send().catch(err => console.error(err));
+  }
+  function handleAlertOff() {
+    console.log("Confirm Notifications Deactivation?")
+    const publicVapidKey =
+      "BAABol4lIL0tpSskELBxy8pFcHw-uNFXoD4WfTlwvPuv4Od-FIoKQUl2kDnESPH4flCcGUfCIzZVmNvadOfMNJE";
+      /*if ("serviceWorker" in navigator) {
+        send().catch(err => console.error(err));
+      }*/
+      async function send() {
+        alert("Confirm Notifications Deactivation?")
+        // Register Service Worker
+        console.log("Registering service worker...");
+        const register = await navigator.serviceWorker.register("/worker.js", {
+          scope: "/"
+        });
+        console.log("Service Worker Registered...");
+      
+        // Check for existing subscription
+        const existingSubscription = await register.pushManager.getSubscription();
+      
+        if (existingSubscription) {
+          // Unsubscribe from the existing subscription
+          console.log("Unsubscribing from existing subscription...");
+          await existingSubscription.unsubscribe();
+          console.log("Existing subscription unsubscribed...");
+        }
+      
+        
+      
+        // Send Push Notification
+        console.log("Sending Push...");
+        await fetch("https://meteorastation.com/api/unsubscribe", {
+          method: "POST",
+          body: JSON.stringify(existingSubscription),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        console.log("Push Sent...");
+      }
+  
+    send().catch(err => console.error(err));
+  }
 
 
   const extractStationNameFromURL = () => {
@@ -100,21 +209,25 @@ function Dashboard() {
     }
     return null;
   };
+ 
 
   let urlChange = extractStationNameFromURL();
-
+  let fristTime = true
 
   useEffect(() => {
     setIsLoading(true);
+    setIsLoadingLine(true); // Set loading to false
+
     setStationData(null);
     // Function to extract station name from the current URL
-
+    console.log("MILOOO")
 
     // Get the station name from the current URL
     const stationName = extractStationNameFromURL();
 
     // Check if stationName is not null before making the API request
     if (stationName) {
+      fristTime == false;
       const getData = async () => {
       // Make the API request with the station name as a parameter
       const sessionID = document.cookie.replace(/(?:(?:^|.*;\s*)sessionID\s*=\s*([^;]*).*$)|^.*$/, "$1");
@@ -125,7 +238,7 @@ function Dashboard() {
       } else {
         try {
           // Send API POST request to check session
-          const response = await fetch('http://94.176.237.198/api/getStationData/' + stationName, {
+          const response = await fetch('https://meteorastation.com/api/getStationData/' + stationName, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -139,10 +252,13 @@ function Dashboard() {
             const responseData = await response.json();
 
             setStationData(responseData);
+
             setLineChartData(responseData.L7DA);
             setBarChartData(responseData.L24H);
             setOtherParamsAvg(responseData.L24H.OtherAverage);
             setIsLoading(false); // Set loading to false
+            setIsLoadingLine(false); // Set loading to false
+
 
 
 
@@ -164,12 +280,266 @@ function Dashboard() {
     }
   }, [urlChange]);
 
+  const [selectedOption, setSelectedOption] = useState("th");
+  const [selectedOption2, setSelectedOption2] = useState("l7");
+  const [selectedOption3, setSelectedOption3] = useState("t24");
+  const [selectedOption4, setSelectedOption4] = useState("t24");
+
+
+
+
+  const handleSelectChange2 = async (event) => {
+    const selectedOption = event.target.value;
+
+    if(selectedOption == 'custom'){
+      console.log("CUSTOM")
+    }
+    
+
+
+
+    if(event.target.name == "7daysSelect"){
+      setSelectedOption(event.target.value);
+    }
+    if(event.target.name == "7daysSelectTitle"){
+      setSelectedOption2(event.target.value);
+    }
+  }
+  useEffect(() => {
+    setIsLoadingLine(true);
+    setLineChartData(null);
+      
+      
+      var days30 = 'false';
+      var param30days = selectedOption;
+      
+
+      if(selectedOption2 == "l30"){
+        days30 = 'true';
+      }
+
+      console.log("Selected Option: " + selectedOption)
+      
+      // Make API request with the selected option
+      const stationName = extractStationNameFromURL();
+      const sessionID = document.cookie.replace(/(?:(?:^|.*;\s*)sessionID\s*=\s*([^;]*).*$)|^.*$/, "$1");
+      
+      const getData = async () => {
+        // Make the API request with the station name as a parameter
+        
+  
+       
+          try {
+            // Send API POST request to check session
+            const response = await fetch('https://meteorastation.com/api/getStationData/' + stationName, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                sessionID,
+                days30,
+                param30days
+              }),
+            });
+
+            const responseData = await response.json();
+
+            const  dummy = {
+              "location": "Dobra Voda",
+              "datetime": "April 28, 2024 at 8:12:35 AM GMT+2",
+              "stationID": "Station1",
+              "airTemp": "15.2 °C",
+              "airHumi": "66 %",
+              "windSpeed": "0 km/h",
+              "windDirection": "75° ENE",
+              "airPressure": "991.8 hPa",
+              "rainAmount": "0 mm",
+              "irradiation": "31 kW/m²",
+              "SH1": "96.8%",
+              "SH2": "97.7%",
+              "SHA": "97%",
+              "ST1": "13.3 °C",
+              "ST2": "13.1 °C",
+              "STA": "13 °C",
+              "L7DA": [
+                  {
+                      "name": "Temperature",
+                      "data": [
+                          1,
+                          2,
+                          3,
+                          4,
+                          3,
+                          2,
+                          1,
+                          8
+                      ]
+                  },
+                  {
+ 
+                  },
+                  {
+                      "categories": [
+                          "01.00",
+                          "02.00",
+                          "03.00",
+                          "04.00",
+                          "05.00",
+                          "06.00",
+                          "07.00"
+                        
+                      ]
+                  }
+              ],
+              "L24H": {
+                  "categories": [
+                      "00:00h",
+                      "03:00h",
+                      "06:00h",
+                      "09:00h",
+                      "12:00h",
+                      "14:00h",
+                      "16:00h",
+                      "19:00h",
+                      "22:00h"
+                  ],
+                  "series": [
+                      {
+                          "name": "Temperature °C",
+                          "data": [
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN",
+                              "NaN"
+                          ]
+                      }
+                  ],
+                  "OtherAverage": {
+                      "Humidity": "NaN %",
+                      "Wind": "NaN km/h",
+                      "Pressure": "NaN hPa",
+                      "Rain": "NaN mm"
+                  }
+              },
+              "systemData": {
+                  "Online": false,
+                  "Signal": {
+                      "status": "-",
+                      "value": "45.7 %"
+                  },
+                  "Battery": {
+                      "status": "0 V",
+                      "value": "0 %"
+                  },
+                  "Solar": {
+                      "status": "0 V",
+                      "value": "0.0 %"
+                  },
+                  "Temperature": {
+                      "status": "-",
+                      "value": "13.2 °C"
+                  },
+                  "Humidity": {
+                      "status": "-",
+                      "value": "68 %"
+                  },
+                  "Pressure": {
+                      "status": "-",
+                      "value": "991.8 hPa"
+                  }
+              }
+          }
+
+            
+            setLineChartData(responseData.L7DA);
+            //setLineChartData(dummy.L7DA);
+            
+            setIsLoadingLine(false); // Set loading to false
+            
+            } catch {} 
+            
+          }
+       
+      getData();
+    
+  },  [selectedOption, selectedOption2]);
+
+  const handleSelectChange3 = async (event) => {
+    const selectedOption3 = event.target.value;
+    
+
+
+
+
+    if(event.target.name == "24hoursSelectTitle"){
+      setSelectedOption3(event.target.value);
+    }
+  }
+  useEffect(() => {
+    setIsLoading(true);
+    setBarChartData(null);
+      
+      
+      var days30 = 'false';
+      var param24hours = selectedOption3;
+
+      
+      
+      // Make API request with the selected option
+      const stationName = extractStationNameFromURL();
+      const sessionID = document.cookie.replace(/(?:(?:^|.*;\s*)sessionID\s*=\s*([^;]*).*$)|^.*$/, "$1");
+      
+      const getData = async () => {
+        // Make the API request with the station name as a parameter
+        
+  
+       
+          try {
+            // Send API POST request to check session
+            const response = await fetch('https://meteorastation.com/api/getStationData/' + stationName, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                sessionID,
+                param24hours
+              }),
+            });
+
+            const responseData = await response.json();
+
+            
+            setBarChartData(responseData.L24H);
+            console.log("Data24hhh:")
+            console.log(responseData.L24H)
+            setIsLoading(false); // Set loading to false
+            
+            } catch {} 
+            
+          }
+       
+      getData();
+    
+  },  [selectedOption3]);
 
   // Helper function to get the data for a specific statistic from the API response
   const getStatisticData = (statisticName) => {
     
       return stationData ? stationData[statisticName] : null;
   };
+
+ 
+ 
+
+ 
+  
   
 
  
@@ -273,21 +643,72 @@ function Dashboard() {
             <Grid item xs={12} lg={6} xl={7}>
               <Card>
                 <VuiBox sx={{ height: "100%" }}>
-                  <VuiTypography variant="lg" color="white" fontWeight="bold" mb="5px">
-                    Last 7 Days Average
-                  </VuiTypography>
+                  <VuiBox variant="lg" color="white" fontWeight="bold" mb="5px">
+                  <Select
+                      sx={{
+                        backgroundColor: 'transparent !important',
+                        color: '#ffffff !important',
+                        border: 'none',
+                        fontFamily: '"Plus Jakarta Display","Helvetica","Arial",sans-serif',
+                        fontSize: '1.125rem !important',
+                        fontWeight: '700 !important',
+                        padding: '0 !important',
+                        marginLeft: "-12px !important",
+                        '&:hover': {
+                          opacity: 0.8, // Adjust the opacity as needed
+                        }
+                      }}
+                      name="7daysSelectTitle"
+                      id="7daysSelectTitle"
+                      value={selectedOption2}
+                      onChange={handleSelectChange2}
+                      
+                    >
+                      <MenuItem value="l7">Last 7 Days Average</MenuItem>
+                      <MenuItem value="l30">Last 30 Days Average</MenuItem>
+                     
+                      
+                    </Select>
+                  </VuiBox>
                   <VuiBox display="flex" alignItems="center" mb="40px">
                     <VuiTypography variant="button" color="text" fontWeight="bold">
-                      Temperature and Humidity
+                      
+                    <Select
+                      sx={{
+                        backgroundColor: 'transparent !important',
+                        color: '#a0aec0 !important',
+                        border: 'none',
+                        fontFamily: '"Plus Jakarta Display","Helvetica","Arial",sans-serif',
+                        fontSize: '0.875rem',
+                        fontWeight: '700',
+                        padding: '0 !important',
+                        marginLeft: "-12px !important"
+                      }}
+                      name="7daysSelect"
+                      id="7daysSelect"
+                      value={selectedOption}
+                      onChange={handleSelectChange2}
+                      endAdornment={<span style={{ fontSize: '2em' , paddingTop: '4px'}}><ArrowDropDownIcon /></span>}
+                    >
+                      <MenuItem value="th">Temperature and Humidity</MenuItem>
+                      <MenuItem value="sht1">Soil TH 1</MenuItem>
+                      <MenuItem value="sht2">Soil TH 2</MenuItem>
+                      <MenuItem value="ws">Wind Speed</MenuItem>
+                      <MenuItem value="ra">Rain Amount</MenuItem>
+                      <MenuItem value="ps">Atmospheric pressure</MenuItem>
+                      <MenuItem value="sr">Solar irradiation</MenuItem>
+                    </Select>
+
                       <VuiTypography variant="button" color="text" fontWeight="regular">
                       <span style={{opacity: "0"}}> in 2021 </span>
                       </VuiTypography>
                     </VuiTypography>
+                    
                   </VuiBox>
                   <VuiBox sx={{ height: "310px" }}>
                     
 
-                      {isLoading ? (
+                      {isLoadingLine ? (
                         <p></p>
                       ) : (
                         <LineChart
@@ -335,12 +756,38 @@ function Dashboard() {
                     }}
                   /> )}
                   </VuiBox>
-                  <VuiTypography variant="lg" color="white" fontWeight="bold" mb="5px">
-                    Temperature Last 24 Hours
-                  </VuiTypography>
+                  <Select
+                      sx={{
+                        backgroundColor: 'transparent !important',
+                        color: '#ffffff !important',
+                        border: 'none',
+                        fontFamily: '"Plus Jakarta Display","Helvetica","Arial",sans-serif',
+                        fontSize: '1.125rem !important',
+                        fontWeight: '700 !important',
+                        padding: '0 !important',
+                        marginLeft: "-12px !important",
+                        '&:hover': {
+                          opacity: 0.8, // Adjust the opacity as needed
+                        }
+                      }}
+                      name="24hoursSelectTitle"
+                      id="24hoursSelectTitle"
+                      value={selectedOption3}
+                      onChange={handleSelectChange3}
+                      
+                    >
+                      <MenuItem value="t24">Temperature Last 24h</MenuItem>
+                      <MenuItem value="h24">Humidity Last 24h</MenuItem>
+                      <MenuItem value="w24">Wind Speed Last 24h</MenuItem>
+                      <MenuItem value="p24">Atmospheric Pressure Last 24h</MenuItem>
+                      <MenuItem value="r24">Rain Amount Last 24h</MenuItem>
+                      <MenuItem value="s24">Solar Irradiation Last 24h</MenuItem>
+
+                      
+                    </Select>
                   <VuiBox display="flex" alignItems="center" mb="40px" >
                     <VuiTypography variant="button" color="text" fontWeight="bold">
-                        And other parameters average
+                        And other parameters daily average
                       <VuiTypography variant="button" color="text" fontWeight="regular">
                       
                       </VuiTypography>
@@ -451,10 +898,16 @@ function Dashboard() {
         </VuiBox>
         <Grid container spacing={3} direction="row" justifyContent="center" alignItems="stretch">
           <Grid item xs={12} md={12} lg={12}>
-            <Projects systemData={getStatisticData('systemData')} />
+            <Projects systemData={getStatisticData('systemData')} date={getStatisticData('datetime')} />
+            
+
           </Grid>
           
         </Grid>
+        <VuiBox sx={{display:'flex', justifyContent: 'flex-end'}}>
+        <VuiButton color='success' sx={{height:'10px', marginTop:'20px', marginLeft:'0px'}} onClick={handleAlertOn}>Alert ON</VuiButton>
+        <VuiButton color='warning' sx={{height:'10px', marginTop:'20px', marginLeft:'10px'}} onClick={handleAlertOff}>Alert OFF</VuiButton>
+        </VuiBox>
       </VuiBox>
       <Footer />
     </DashboardLayout>

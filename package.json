@@ -27,6 +27,7 @@
 		"apexcharts": "^3.30.0",
 		"axios": "^1.6.2",
 		"chroma-js": "2.1.2",
+		"cross-env": "^7.0.3",
 		"eslint": "^7.11.0",
 		"install": "^0.13.0",
 		"js-cookie": "^3.0.5",
@@ -49,6 +50,7 @@
 	},
 	"scripts": {
 		"fixerror": "export NODE_OPTIONS=--openssl-legacy-provider",
+		"fixerror2": "node -e \"process.env.NODE_OPTIONS = '--openssl-legacy-provider'; console.log('NODE_OPTIONS set to --openssl-legacy-provider')\"",
 		"start": "PORT=3006 react-scripts start",
 		"build": "PORT=3006 react-scripts build",
 		"test": "react-scripts test",

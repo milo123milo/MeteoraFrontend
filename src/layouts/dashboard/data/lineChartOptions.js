@@ -19,14 +19,14 @@
 export const lineChartOptionsDashboard = {
   chart: {
     toolbar: {
-      show: false,
+      show: true,
     },
   },
   tooltip: {
     theme: "dark",
   },
   dataLabels: {
-    enabled: false,
+    enabled: true,
   },
   stroke: {
     curve: "smooth",
@@ -47,8 +47,12 @@ export const lineChartOptionsDashboard = {
       show: false,
     },
     axisTicks: {
-      show: false,
+      show: true,
     },
+    tickAmount: 5, // This sets the number of ticks to show
+    tickPlacement: 'on', // This ensures ticks are placed on the data points
+    min: 1,
+    
   },
   yaxis: {
     labels: {
@@ -59,7 +63,10 @@ export const lineChartOptionsDashboard = {
     },
   },
   legend: {
-    show: false,
+    show: true,
+    labels: {
+      colors: "#ffffff", // Change the color of the legend font
+    }
   },
   grid: {
     strokeDashArray: 5,

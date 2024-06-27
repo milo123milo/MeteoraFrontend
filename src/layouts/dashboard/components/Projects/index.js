@@ -37,8 +37,8 @@ import Table from "examples/Tables/Table";
 // Data
 import data from "layouts/dashboard/components/Projects/data";
 
-function Projects({ systemData }) {
-  //console.log(systemData)
+function Projects({ systemData, date }) {
+  
   const { columns, rows } = data(systemData);
   const [menu, setMenu] = useState(null);
 
@@ -72,11 +72,13 @@ function Projects({ systemData }) {
         height: "100% !important",
       }}
     >
-      <VuiBox display="flex" justifyContent="space-between" alignItems="center" mb="32px">
+      <VuiBox width="100%" display="flex" justifyContent="space-between" alignItems="center" mb="32px">
         <VuiBox mb="auto">
+          <VuiBox width="100%" display="flex" justifyContent="space-between" alignItems="center">
           <VuiTypography color="white" variant="lg" mb="6px" gutterBottom>
             System Overview
           </VuiTypography>
+          </VuiBox>
           {systemData && systemData.Online ? (
         <VuiBox display="flex" alignItems="center" lineHeight={0}>
           <BsCheckCircleFill color="green" size="15px" />
@@ -93,8 +95,13 @@ function Projects({ systemData }) {
           </VuiTypography>
         </VuiBox>
       )}
+         
         </VuiBox>
         <VuiBox color="text" px={2}>
+
+        <div>
+         
+          </div>
           
         </VuiBox>
         {renderMenu}
@@ -114,7 +121,17 @@ function Projects({ systemData }) {
         }}
       >
         <Table columns={columns} rows={rows} />
+        <VuiBox sx={{marginTop: "20px"}}>
+        <VuiTypography variant="button" fontWeight="bold" color="text" ml="5px">
+            Last Update: 
+          </VuiTypography>
+          <VuiTypography variant="button" fontWeight="regular" color="text" ml="5px">
+             {date}
+          </VuiTypography>
+          </VuiBox>
+        
       </VuiBox>
+      
     </Card>
   );
 }

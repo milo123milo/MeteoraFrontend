@@ -96,10 +96,10 @@ export default function data(systemData) {
              color="info" label={false} sx={{ background: "#2D2E5F" }} />
           </VuiBox>
         ),
-      },
+      }, /*
       {
         parameters: (
-          <VuiBox display="flex" alignItems="center">
+          <VuiBox display="none" alignItems="center">
             <FaCarBattery size="20px" />
             <VuiTypography pl="16px" color="white" variant="button" fontWeight="medium">
               Battery
@@ -107,7 +107,7 @@ export default function data(systemData) {
           </VuiBox>
         ),
         members: (
-          <VuiBox display="flex" py={1}>
+          <VuiBox display="none" py={1}>
             {avatars([
               [avatar2, "Romina Hadid"],
               [avatar4, "Jessica Doe"],
@@ -115,12 +115,12 @@ export default function data(systemData) {
           </VuiBox>
         ),
         status: (
-          <VuiTypography variant="button" color="white" fontWeight="bold">
+          <VuiTypography display="none" variant="button" color="white" fontWeight="bold">
             {systemData ? `${systemData.Battery.status}` : ''}
           </VuiTypography>
         ),
         value: (
-          <VuiBox width="8rem" textAlign="left">
+          <VuiBox display="none" width="8rem" textAlign="left">
             <VuiTypography color="white" variant="button" fontWeight="bold">
             {systemData ? `${systemData.Battery.value}` : ''}
             </VuiTypography>
@@ -129,7 +129,7 @@ export default function data(systemData) {
           </VuiBox>
         ),
       },
-      {
+      { 
         parameters: (
           <VuiBox display="flex" alignItems="center">
             <TbSolarElectricity size="20px" />
@@ -160,7 +160,7 @@ export default function data(systemData) {
              color="info" label={false} sx={{ background: "#2D2E5F" }} />
           </VuiBox>
         ),
-      },
+      }, */
       {
         parameters: (
           <VuiBox display="flex" alignItems="center">

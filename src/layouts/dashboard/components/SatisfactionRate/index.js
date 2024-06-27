@@ -85,7 +85,7 @@ const SatisfactionRate = ({value}) => {
 							{irrVal}
 						</VuiTypography>
 						<VuiTypography color='text' variant='caption' fontWeight='regular'>
-							kW/m²
+							W/m²
 						</VuiTypography>
 					</VuiBox>
 					<VuiTypography color='text' variant='caption' display='inline-block' fontWeight='regular'>
